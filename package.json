@@ -1,0 +1,14 @@
+{
+  "name": "@openclaw/telemetry",
+  "version": "0.1.0",
+  "description": "OpenClaw telemetry plugin - captures tool calls, LLM usage, and message events to JSONL",
+  "type": "module",
+  "devDependencies": {
+    "openclaw": "workspace:*"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "id": "telemetry",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "description": "Enable telemetry capture"
+      },
+      "filePath": {
+        "type": "string",
+        "description": "Path to the JSONL output file (defaults to ~/.openclaw/logs/telemetry.jsonl)"
+      },
+      "syslog": {
+        "type": "object",
+        "description": "Syslog output configuration for SIEM integration",
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable syslog output"
+          },
+          "host": {
+            "type": "string",
+            "description": "Syslog server hostname or IP"
+          },
+          "port": {
+            "type": "number",
+            "description": "Syslog server port (default: 514)"
+          },
+          "protocol": {
+            "type": "string",
+            "enum": ["udp", "tcp", "tcp-tls"],
+            "description": "Transport protocol (default: udp)"
+          },
+          "facility": {
+            "type": "number",
+            "description": "Syslog facility code (default: 16 = local0)"
+          },
+          "appName": {
+            "type": "string",
+            "description": "Application name in syslog messages (default: openclaw)"
+          },
+          "format": {
+            "type": "string",
+            "enum": ["cef", "json"],
+            "description": "Message format: cef (Common Event Format) or json (default: cef)"
+          }
+        },
+        "required": ["host"]
+      },
+      "redact": {
+        "type": "object",
+        "description": "Sensitive data redaction configuration",
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable sensitive data redaction"
+          },
+          "patterns": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Regex patterns to redact (prefix with (?i) for case-insensitive). Defaults to common API key/token patterns."
+          },
+          "replacement": {
+            "type": "string",
+            "description": "Replacement text for redacted values (default: [REDACTED])"
+          }
+        }
+      },
+      "integrity": {
+        "type": "object",
+        "description": "Event integrity hash chain configuration",
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable cryptographic hash chain for tamper detection"
+          },
+          "algorithm": {
+            "type": "string",
+            "description": "Hash algorithm (default: sha256)"
+          }
+        }
+      },
+      "rateLimit": {
+        "type": "object",
+        "description": "Rate limiting configuration to prevent flooding",
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable rate limiting"
+          },
+          "maxEventsPerSecond": {
+            "type": "number",
+            "description": "Maximum events per second (default: 100)"
+          },
+          "burstSize": {
+            "type": "number",
+            "description": "Burst capacity (default: 2x maxEventsPerSecond)"
+          }
+        }
+      },
+      "rotate": {
+        "type": "object",
+        "description": "Log rotation configuration",
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Enable log rotation"
+          },
+          "maxSizeBytes": {
+            "type": "number",
+            "description": "Maximum file size in bytes before rotation (default: 10MB)"
+          },
+          "maxFiles": {
+            "type": "number",
+            "description": "Maximum number of rotated files to keep (default: 5)"
+          },
+          "compress": {
+            "type": "boolean",
+            "description": "Compress rotated files with gzip (default: true)"
+          }
+        }
+      }
+    }
+  }
+}
