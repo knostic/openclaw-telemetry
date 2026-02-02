@@ -2,21 +2,52 @@
 
 Captures tool calls, LLM usage, agent lifecycle, and message events. Outputs to JSONL file and optionally to syslog for SIEM integration.
 
-## Installation
+## Quick Start
 
-The plugin is bundled with OpenClaw. Enable it in your config:
+### 1. Install
 
+```bash
+openclaw plugins install ./openclaw-telemetry
+```
+
+Or copy manually:
+```bash
+cp -R ./openclaw-telemetry ~/.openclaw/extensions/telemetry
+```
+
+### 2. Configure
+
+Via Control UI: **Settings → Config → plugins.entries.telemetry**
+
+Or edit `~/.openclaw/config.json`:
 ```json
 {
   "plugins": {
-    "telemetry": {
-      "enabled": true
+    "entries": {
+      "telemetry": {
+        "enabled": true,
+        "config": {
+          "enabled": true
+        }
+      }
     }
   }
 }
 ```
 
-Add to `~/.openclaw/config.json`.
+### 3. Restart Gateway
+
+```bash
+openclaw gateway
+```
+
+Logs write to `~/.openclaw/logs/telemetry.jsonl` by default.
+
+### Coming Soon
+
+```bash
+openclaw plugins install @openclaw/telemetry
+```
 
 ## Configuration
 
