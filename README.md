@@ -17,7 +17,7 @@
 
 ---
 
-# OpenClaw Telemetry Plugin
+# OpenClaw Telemetry Plugin - TL;DR
 
 Captures tool calls, LLM usage, agent lifecycle, and message events. Outputs to JSONL file and optionally to syslog for SIEM integration.
 
