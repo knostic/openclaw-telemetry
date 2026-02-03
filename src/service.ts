@@ -40,7 +40,7 @@ export function createTelemetryService(): TelemetryService {
     id: "telemetry",
     write: writeEvent,
     async start(ctx) {
-      const cfg = ctx.config.plugins?.telemetry as TelemetryConfig | undefined;
+      const cfg = ctx.config.plugins?.entries?.telemetry?.config as TelemetryConfig | undefined;
       if (!cfg?.enabled) {
         return;
       }
