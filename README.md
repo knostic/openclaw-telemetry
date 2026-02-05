@@ -13,7 +13,9 @@
 
 > **Observability for OpenClaw.** Capture every tool call, LLM request, and agent session — with built-in redaction, tamper-proof hash chains, syslog/SIEM forwarding, and rate limiting. Drop it in and know exactly what your agents are doing.
 
-**Like the tool?** Check out how Knostic helps you with visibility and control of your coding agents and MCP/extensions, from Cursor and Claude Code, to Copilot.
+Also check out:
+- **openclaw-detect:** https://github.com/knostic/openclaw-detect/
+- **Like what we do?** Knostic helps you with visibility and control of your coding agents and MCP/extensions, from Cursor and Claude Code, to Copilot.
 
 ---
 
