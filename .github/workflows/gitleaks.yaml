@@ -5,13 +5,31 @@ on:
   pull_request:
 jobs:
   scan:
-    uses: knostic/.github/.github/workflows/gitleaks.yaml@fix/gitleaks-scan-range
+    name: gitleaks
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: read
-    with:
-      event_name: ${{ github.event_name }}
-      base_sha: ${{ github.event.pull_request.base.sha || '' }}
-      before_sha: ${{ github.event.before || '' }}
-      forced: ${{ github.event.forced == true }}
-    secrets: inherit
+      actions: read
+      checks: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Set scan range
+        id: range
+        run: |
+          NULL_SHA="0000000000000000000000000000000000000000"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "log_opts=${{ github.event.pull_request.base.sha }}..HEAD" >> $GITHUB_OUTPUT
+          elif [ "${{ github.event.before }}" = "$NULL_SHA" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.forced }}" = "true" ]; then
+            echo "log_opts=" >> $GITHUB_OUTPUT
+          else
+            echo "log_opts=${{ github.event.before }}..HEAD" >> $GITHUB_OUTPUT
+          fi
+      - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+          GITLEAKS_LOG_OPTS: ${{ steps.range.outputs.log_opts }}
