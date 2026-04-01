@@ -2,13 +2,9 @@ import { readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-vi.mock("openclaw/plugin-sdk", async () => {
-  const actual = await vi.importActual<typeof import("openclaw/plugin-sdk")>("openclaw/plugin-sdk");
-  return {
-    ...actual,
-    onDiagnosticEvent: vi.fn(() => vi.fn()),
-  };
-});
+vi.mock("openclaw/plugin-sdk", () => ({
+  onDiagnosticEvent: vi.fn(() => vi.fn()),
+}));
 
 import { createTelemetryService } from "./service.js";
 
