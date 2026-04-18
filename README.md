@@ -40,7 +40,8 @@ cp -R ./openclaw-telemetry ~/.openclaw/extensions/telemetry
 
 Via Control UI: **Settings → Config → plugins.entries.telemetry**
 
-Or edit `~/.openclaw/config.json`:
+Or edit `~/.openclaw/openclaw.json` (note the path — some older docs say
+`config.json`, but the actual file is `openclaw.json`):
 ```json
 {
   "plugins": {
@@ -56,10 +57,19 @@ Or edit `~/.openclaw/config.json`:
 }
 ```
 
+**Important** — both the outer `enabled` (OpenClaw's "plugin is active"
+flag) and the inner `config.enabled` (this plugin's "capture events" flag)
+must be `true`. If you omit the nested `config` object entirely — e.g. you
+have only `{ "enabled": true }` at `plugins.entries.telemetry` — the
+plugin's `start()` silently bails and **no events are written**. This is
+the most common misconfiguration; if `~/.openclaw/logs/telemetry.jsonl`
+never appears after an agent turn, check that the nested `config.enabled`
+is present.
+
 ### 3. Restart Gateway
 
 ```bash
-openclaw gateway
+systemctl --user restart openclaw-gateway
 ```
 
 Logs write to `~/.openclaw/logs/telemetry.jsonl` by default.

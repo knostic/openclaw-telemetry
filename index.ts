@@ -1,16 +1,23 @@
 import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
-import { createTelemetryService } from "./src/service.js";
+import { createTelemetryService, type TelemetryService } from "./src/service.js";
+
+// Module-level singleton so re-registrations share the same service instance.
+// OpenClaw may call register() multiple times per plugin lifetime (e.g., CLI
+// metadata vs gateway full load); keeping svc at module scope ensures hooks
+// reference the same service that receives start()/stop().
+let svc: TelemetryService | null = null;
 
 export default {
   id: "telemetry",
   name: "OpenClaw Telemetry",
   description: "Captures tool calls, LLM usage, and message events to JSONL",
   register(api: OpenClawPluginApi) {
-    const svc = createTelemetryService();
+    if (!svc) svc = createTelemetryService();
     api.registerService(svc);
+    const s = svc;
 
     api.on("before_tool_call", (evt, ctx) => {
-      svc.write({
+      s.write({
         type: "tool.start",
         toolName: evt.toolName,
         params: evt.params,
@@ -20,7 +27,7 @@ export default {
     });
 
     api.on("after_tool_call", (evt, ctx) => {
-      svc.write({
+      s.write({
         type: "tool.end",
         toolName: evt.toolName,
         durationMs: evt.durationMs,
@@ -32,7 +39,7 @@ export default {
     });
 
     api.on("message_received", (evt, ctx) => {
-      svc.write({
+      s.write({
         type: "message.in",
         channel: ctx.channelId,
         from: evt.from,
@@ -41,7 +48,7 @@ export default {
     });
 
     api.on("message_sent", (evt, ctx) => {
-      svc.write({
+      s.write({
         type: "message.out",
         channel: ctx.channelId,
         to: evt.to,
@@ -51,7 +58,7 @@ export default {
     });
 
     api.on("before_agent_start", (evt, ctx) => {
-      svc.write({
+      s.write({
         type: "agent.start",
         sessionKey: ctx.sessionKey,
         agentId: ctx.agentId,
@@ -60,7 +67,7 @@ export default {
     });
 
     api.on("agent_end", (evt, ctx) => {
-      svc.write({
+      s.write({
         type: "agent.end",
         sessionKey: ctx.sessionKey,
         agentId: ctx.agentId,
