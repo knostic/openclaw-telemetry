@@ -40,13 +40,16 @@ cp -R ./openclaw-telemetry ~/.openclaw/extensions/telemetry
 
 Via Control UI: **Settings → Config → plugins.entries.telemetry**
 
-Or edit `~/.openclaw/config.json`:
+Or edit `~/.openclaw/openclaw.json`:
 ```json
 {
   "plugins": {
     "entries": {
       "telemetry": {
         "enabled": true,
+        "hooks": {
+          "allowConversationAccess": true
+        },
         "config": {
           "enabled": true
         }
@@ -55,6 +58,10 @@ Or edit `~/.openclaw/config.json`:
   }
 }
 ```
+
+OpenClaw 2026.7.2 and newer require
+`plugins.entries.telemetry.hooks.allowConversationAccess: true` because the
+plugin inspects prompt content through the `before_prompt_build` hook.
 
 ### 3. Restart Gateway
 

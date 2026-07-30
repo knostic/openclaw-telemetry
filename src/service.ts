@@ -1,5 +1,5 @@
-import type { OpenClawPluginService } from "openclaw/plugin-sdk";
-import { onDiagnosticEvent } from "openclaw/plugin-sdk";
+import { onDiagnosticEvent } from "openclaw/plugin-sdk/diagnostic-runtime";
+import type { OpenClawPluginService } from "openclaw/plugin-sdk/plugin-entry";
 import { createIntegrityChain } from "./integrity.js";
 import { createRateLimiter } from "./ratelimit.js";
 import { createRedactor } from "./redact.js";

@@ -1,4 +1,4 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
+import type { OpenClawPluginApi } from "openclaw/plugin-sdk/plugin-entry";
 import { createTelemetryService } from "./src/service.js";
 
 export default {
@@ -50,7 +50,7 @@ export default {
       });
     });
 
-    api.on("before_agent_start", (evt, ctx) => {
+    api.on("before_prompt_build", (evt, ctx) => {
       svc.write({
         type: "agent.start",
         sessionKey: ctx.sessionKey,
